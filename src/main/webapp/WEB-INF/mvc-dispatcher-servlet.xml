@@ -15,6 +15,28 @@
     <!-- ensure that all controllers will be picked up as beans -->
     <context:component-scan base-package="com.stefan.spitter.mvc"/>
 
+	<!-- Adding in Tiles view resolver -->
+	<bean class="org.springframework.web.servlet.view.tiles2.TilesViewResolver"/>
+	
+	<bean class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+		<propertyname="definitions">
+			<list>
+				<value>/WEB-INF/views/views.xml</value>
+				<value>/WEB-INF/views/**/views.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Setting up the view convention using Internal Resource View Resolver-->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- ensure that the view resolver can parse & render JSTL -->
+		<property name="viewClass"
+					value="org.springframework.web.servlet.view.JstlView"/>
+		<propertyname="prefix"value="/WEB-INF/views/"/>
+		<propertyname="suffix"value=".jsp"/>
+	</bean>
+
+
     <!-- DataSource connection -->
 	<bean id="myDataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
