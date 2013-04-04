@@ -1,25 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tx="http://www.springframework.org/schema/tx"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jms="http://www.springframework.org/schema/jms"
+	xmlns:amq="http://activemq.apache.org/schema/core"	
+	xmlns:aop="http://www.springframework.org/schema/aop"	
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		
     <mvc:resources mapping="/resources/**" location="/resources/" />
+    
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+    
     
     <!-- ensure that we are using annotations for our spring web app -->
     <mvc:annotation-driven/>
     
     <!-- ensure that all controllers will be picked up as beans -->
-    <context:component-scan base-package="com.stefan.spitter.mvc"/>
+    <context:component-scan base-package="com.stefan.order.spitter.mvc"/>
 
 	<!-- Adding in Tiles view resolver -->
-	<bean class="org.springframework.web.servlet.view.tiles2.TilesViewResolver"/>
+	<bean class="org.springframework.web.servlet.view.tiles3.TilesViewResolver"/>
 	
-	<bean class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
-		<propertyname="definitions">
+	<bean class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<property name="definitions">
 			<list>
 				<value>/WEB-INF/views/views.xml</value>
 				<value>/WEB-INF/views/**/views.xml</value>
@@ -32,8 +47,8 @@
 		<!-- ensure that the view resolver can parse & render JSTL -->
 		<property name="viewClass"
 					value="org.springframework.web.servlet.view.JstlView"/>
-		<propertyname="prefix"value="/WEB-INF/views/"/>
-		<propertyname="suffix"value=".jsp"/>
+		<property name="prefix" value="/WEB-INF/views/"/>
+		<property name="suffix" value=".jsp"/>
 	</bean>
 
 
@@ -53,9 +68,10 @@
 		<property name="hibernateProperties">
 		    <props>
 		        <prop key="dialect">org.hibernate.dialect.MySQLDialect</prop>
+		        <prop key="hibernate.hbm2ddl.auto">create</prop>
 		    </props>
 		</property>
-		<property name="packagesToScan" value="com.stefan.dao"/>
+		<property name="packagesToScan" value="com.stefan.dao*"/>
 		<property name="annotatedClasses">
 		    <list>
 		        <value>com.stefan.order.Order</value>
@@ -65,11 +81,53 @@
         </property>
      </bean>
     
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+  	  <property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+    
+    <tx:annotation-driven transaction-manager="transactionManager" />
     
     <!-- DAO Wiring and component scanning -->
     <context:component-scan base-package="com.stefan.dao" />
     <bean id="orderDAO" class="com.stefan.dao.OrderDAO">
+        <!-- <property name="sessionFactory" ref="sessionFactory"/>-->
+    </bean>
+    
+    <!-- Using AOP to populate the session for the DAOs -->    
+    <aop:aspectj-autoproxy proxy-target-class="true"/>    
+    
+    <bean id="daoSessionHandler" class="com.stefan.dao.DAOSessionHandler">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
+    
+    <!-- A special view resolver that takes the content type that the client wants into consideration -->
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="mediaTypes">
+		<map>
+			<entry key="json" value="application/json" />
+			<entry key="xml" value="text/xml" />
+			<entry key="htm" value="text/html" />
+		</map>
+		</property>
+		<property name="defaultContentType" value="text/html" />
+	</bean>
+    
+    <!-- ActiveMQ for JMS 
+    <bean id="connectionFactory" class="org.apache.activemq.spring.ActiveMQConnectionFactory">
+		<property name="brokerURL" value="tcp://localhost:61616"/>
+	</bean> -->
+	<bean id="spitterService" class="com.stefan.spitter.SpitterService"/>
+	
+    <bean id="homeController" class="com.stefan.order.mvc.HomeController">
+        <property name="spitterService" ref="spitterService"/>
+    </bean>
+    <!-- Set up the HomeController as an "MBean" -->
+    <bean id="mbeanExporter" class="org.springframework.jmx.export.MBeanExporter">
+		<property name="beans">
+			<map>
+				<entry key="spitter:name=HomeController" value-ref="homeController"/>
+			</map>
+		</property>
+	</bean>
     
 </beans>

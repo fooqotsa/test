@@ -12,6 +12,7 @@ import com.stefan.spitter.SpitterService;
 @Controller
 public class HomeController {
 	public static final int DEFAULT_SPITTLES_PER_PAGE = 25;
+	private int spittlesPerPage = DEFAULT_SPITTLES_PER_PAGE;
 	
 	private  SpitterService spitterService;
 	
@@ -25,5 +26,21 @@ public class HomeController {
 		model.put("spittles", spitterService.getRecentSpittles(DEFAULT_SPITTLES_PER_PAGE));
 		
 		return "home";
+	}
+	
+	public void setSpittlesPerPage(int spittlesPerPage){
+		this.spittlesPerPage = spittlesPerPage;
+	}
+	
+	public int getSpittlesPerPage(){
+		return spittlesPerPage;
+	}
+	
+	public SpitterService getSpitterService(){
+		return spitterService;
+	}
+	
+	public void setSpitterService(SpitterService spitterService){
+		this.spitterService = spitterService;
 	}
 }

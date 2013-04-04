@@ -4,12 +4,16 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.stefan.dao.AbstractDao;
 import com.stefan.dao.SpittleDao;
 import com.stefan.spittle.Spittle;
 
-public class HibernateSpittleDao implements SpittleDao{
+@Repository
+public class HibernateSpittleDao extends AbstractDao implements SpittleDao{
+	
 	private SessionFactory sessionFactory;
 	
 	@Autowired
@@ -30,12 +34,10 @@ public class HibernateSpittleDao implements SpittleDao{
 	}
 
 	public List<Spittle> getSpittles(int noOfSpittles) {
-		return currentSession().createCriteria(Spittle.class)
-				.addOrder(Order.desc("spittle_id")).list();
+		return currentSession().createCriteria(Spittle.class).list();
 	}
-
-	public Session currentSession() {
-		return sessionFactory.getCurrentSession();
+	
+	public void deleteSpittle(Spittle spittle){
+		currentSession().delete(spittle);
 	}
-
 }

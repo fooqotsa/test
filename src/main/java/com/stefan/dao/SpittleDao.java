@@ -6,8 +6,6 @@ import org.hibernate.Session;
 import com.stefan.spittle.Spittle;
 
 public interface SpittleDao {
-
-	Session currentSession();
 	
 	void addSpittle(Spittle spittle);
 	
@@ -16,4 +14,6 @@ public interface SpittleDao {
 	void saveSpittle(Spittle spittle);
 	
 	List<Spittle> getSpittles(int noOfSpittles);
+	
+	void deleteSpittle(Spittle spittle);
 }

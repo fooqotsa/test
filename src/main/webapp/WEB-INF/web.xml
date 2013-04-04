@@ -6,27 +6,43 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
          http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" >
 
-  <welcome-file-list>
-    <welcome-file>
-      index.jsp
-    </welcome-file>
-  </welcome-file-list>
-
-  <servlet>
+  	<servlet>
       <servlet-name>mvc-dispatcher</servlet-name>
       <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
       <load-on-startup>1</load-on-startup>
-  </servlet>
+	</servlet>
   
-  <servlet-mapping>
+  	<servlet-mapping>
       <servlet-name>mvc-dispatcher</servlet-name>
       <url-pattern>/</url-pattern>
-  </servlet-mapping>
+  	</servlet-mapping>
   
-  <context-param>
+  	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/mvc-dispatcher-servlet.xml</param-value>
-  </context-param>
+  	</context-param>
   
+  
+	  <filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+  	</filter>
+  
+	  
+	<!-- Enable the ability for spring forms to masquerade PUTs and DELETEs as POSTs
+		 which are then translated by the HiddenHttpMethodFilter for the Controllers
+		 NOTE: This is a workaround for HTML 4 and older browsers   
+  	<filter>
+		<filter-name>httpMethodFilter</filter-name>
+		<filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+	</filter>
+  
+  	 use the httpMethodFilter to filter on all urls within this application before the requests
+  		 reach the DispatcherServlet 
+	<filter-mapping>
+		<filter-name>httpMethodFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>-->
+
   
 </web-app>

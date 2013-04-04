@@ -2,14 +2,17 @@ package com.stefan.dao.impl;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.stefan.dao.AbstractDao;
 import com.stefan.dao.SpitterDao;
 import com.stefan.spitter.Spitter;
+import com.stefan.spittle.Spittle;
 
 @Repository
-public class HibernateSpitterDao implements SpitterDao{
+public class HibernateSpitterDao extends AbstractDao implements SpitterDao{
 
 	private SessionFactory sessionFactory;
 	
@@ -17,10 +20,7 @@ public class HibernateSpitterDao implements SpitterDao{
 	public HibernateSpitterDao (SessionFactory sessionFactory){
 		this.sessionFactory = sessionFactory;
 	}
-	
-	public Session currentSession() {
-		return sessionFactory.getCurrentSession();
-	}
+
 
 	public void addSpitter(Spitter spitter) {
 		currentSession().save(spitter);
@@ -33,5 +33,10 @@ public class HibernateSpitterDao implements SpitterDao{
 	public void saveSpitter(Spitter spitter) {
 		currentSession().update(spitter);
 	}
+
+	public Spitter getSpitter(String username) {
+		return (Spitter) currentSession().createCriteria(Spittle.class)
+				.add(Restrictions.eq("spitter_name", username));
+	}	
 
 }

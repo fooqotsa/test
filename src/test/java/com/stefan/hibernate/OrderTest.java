@@ -15,7 +15,7 @@ import com.stefan.order.Order;
 @Configuration
 public class OrderTest {
 	
-	@Autowired
+	/*@Autowired
 	OrderDAO orderDao;
 	
 	@Test
@@ -28,5 +28,5 @@ public class OrderTest {
 		order.setOrderType("Small");
 		orderDao.saveOrder(order);
 		
-	}
+	}*/
 }

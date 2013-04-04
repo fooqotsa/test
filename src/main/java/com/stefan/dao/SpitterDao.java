@@ -1,12 +1,8 @@
 package com.stefan.dao;
 
-import org.hibernate.Session;
-
 import com.stefan.spitter.Spitter;
 
 public interface SpitterDao {
-
-	Session currentSession();
 	
 	void addSpitter(Spitter spitter);
 	
@@ -14,4 +10,5 @@ public interface SpitterDao {
 	
 	void saveSpitter(Spitter spitter);
 	
+	Spitter getSpitter(String username);
 }
