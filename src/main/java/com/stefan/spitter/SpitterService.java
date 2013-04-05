@@ -3,11 +3,13 @@ package com.stefan.spitter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.stefan.dao.impl.HibernateSpitterDao;
 import com.stefan.dao.impl.HibernateSpittleDao;
 import com.stefan.spittle.Spittle;
 
+@Transactional
 public class SpitterService {
 
 	@Autowired
@@ -29,7 +31,7 @@ public class SpitterService {
 	}
 
 	public void saveSpitter(Spitter spitter) {
-		spitterDao.saveSpitter(spitter);
+		spitterDao.addSpitter(spitter);
 	}
 
 	public Spittle getSpittleById(long id) {

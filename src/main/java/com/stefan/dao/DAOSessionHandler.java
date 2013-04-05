@@ -1,6 +1,7 @@
 package com.stefan.dao;
 
-import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -33,19 +34,19 @@ public class DAOSessionHandler {
 	public void currentSession(){		
 	}
 	
-	@Before("currentSession()")
-	public Session getSession(){
+	@Before("execution(* com.stefan.dao.impl.*.*(..))")
+	public Session getSession(JoinPoint point){
+		//Note we do NOT have to take care of closing the Session after opening it 
+		//as this session is per thread basis, once the thread closes, hibernate 
+		//will also close the session
 		System.out.println("OPENING THE SESSION");
-		if (sessionFactory.isClosed()){
-			sessionFactory.openSession();
-		}		
-		return sessionFactory.getCurrentSession();
+		System.out.println("POINT CLASS = " + point.getSignature().getName());
+		return sessionFactory.openSession();
 	}
 	
-	
-	public void closeSession(){
-		System.out.println("CLOSING THE SESSION");
-		sessionFactory.close();
+	@AfterReturning("execution(* com.stefan.dao.impl.*.*(..))" )
+	public void flushAndClearSession(){
+		sessionFactory.getCurrentSession().flush();
+		sessionFactory.getCurrentSession().clear();
 	}
-	
 }

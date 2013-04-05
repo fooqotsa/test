@@ -2,6 +2,7 @@
 	"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 <tiles-definitions>
 	<definition name="template" template="/WEB-INF/views/main_template.jsp">
+	    <put-attribute name="navbar" value="/WEB-INF/views/nav/nav_bar.jsp"/>
 		<put-attribute name="top" value="/WEB-INF/views/tiles/spittleForm.jsp"/>
 		<put-attribute name="side" value="/WEB-INF/views/tiles/signinsignup.jsp"/>
 	</definition>

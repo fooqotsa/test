@@ -9,7 +9,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 
 import com.stefan.ApplicationContextProvider;
-import com.stefan.dao.OrderDAO;
+
 import com.stefan.order.Order;
 
 @Configuration

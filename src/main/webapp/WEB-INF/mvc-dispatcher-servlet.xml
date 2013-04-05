@@ -45,8 +45,7 @@
 	<!-- Setting up the view convention using Internal Resource View Resolver-->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<!-- ensure that the view resolver can parse & render JSTL -->
-		<property name="viewClass"
-					value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
 		<property name="prefix" value="/WEB-INF/views/"/>
 		<property name="suffix" value=".jsp"/>
 	</bean>
@@ -56,8 +55,7 @@
 	<bean id="myDataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
-		<property name="url"
-			value="jdbc:mysql://localhost:3306/test"></property>
+		<property name="url" value="jdbc:mysql://localhost:3306/test"></property>
 		<property name="username" value="root"></property>
 		<property name="password" value="intrallect"></property>
 	</bean>    
@@ -88,11 +86,9 @@
     <tx:annotation-driven transaction-manager="transactionManager" />
     
     <!-- DAO Wiring and component scanning -->
-    <context:component-scan base-package="com.stefan.dao" />
-    <bean id="orderDAO" class="com.stefan.dao.OrderDAO">
-        <!-- <property name="sessionFactory" ref="sessionFactory"/>-->
-    </bean>
+    <context:component-scan base-package="com.stefan.*" />
     
+    <bean id="abstractDao" class="com.stefan.dao.AbstractDao" abstract="true"/>
     <!-- Using AOP to populate the session for the DAOs -->    
     <aop:aspectj-autoproxy proxy-target-class="true"/>    
     

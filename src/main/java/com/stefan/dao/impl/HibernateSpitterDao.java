@@ -21,6 +21,7 @@ public class HibernateSpitterDao extends AbstractDao implements SpitterDao{
 		this.sessionFactory = sessionFactory;
 	}
 
+	public HibernateSpitterDao(){}
 
 	public void addSpitter(Spitter spitter) {
 		currentSession().save(spitter);
@@ -35,8 +36,9 @@ public class HibernateSpitterDao extends AbstractDao implements SpitterDao{
 	}
 
 	public Spitter getSpitter(String username) {
-		return (Spitter) currentSession().createCriteria(Spittle.class)
-				.add(Restrictions.eq("spitter_name", username));
-	}	
+		return (Spitter) currentSession().createCriteria(Spitter.class)
+				.add(Restrictions.eq("name", username)).uniqueResult();
+	}
+	
 
 }

@@ -1,6 +1,6 @@
-<html xmlns:sf="http://www.springframework.org/tags/form">
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 
-<div>
+<div style="padding-top:10px">
 	<h2>Create a free Spitter Account</h2>
 
 	<sf:form method="POST" modelAttribute="spitter" enctype="multipart/form-data">
@@ -8,10 +8,9 @@
 			<table cellspacing="0">
 				<tr>
 					<th><label for="user_screen_name">Username: </label></th>
-					<td><sf:inpput path="name" size="15" maxlength="15" 
-						id="user_screen_name"/>
+					<td><sf:input path="name" size="15" maxlength="15" id="user_screen_name"/>
 						<small id="username_msg">No spaces, please.</small>
-						<sf:errors path="username" cssClass="error"/>
+						<sf:errors path="name" cssClass="error"/>
 					</td>
 				</tr>
 				<tr>

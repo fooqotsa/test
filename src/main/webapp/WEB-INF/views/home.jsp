@@ -1,12 +1,12 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<html xmlns:t uri="http://tiles.apache.org/tags-tiles">
-<div>
-	<h2>A global community of friends and strangers spitting out their 
+<%@ taglib prefix="t" uri="http://tiles.apache.org/tags-tiles"%>
+<div style="padding-top:10px;">
+	<h3>A global community of friends and strangers spitting out their 
 		inner-most and personal thoughts on the web for everyone else to see.
-	</h2>
-	<h3>Look at what these people are spitting right now...</h3>
+	</h3>
+	<h4>Look at what these people are spitting right now...</h4>
 	<ol class="spittle-list">
 		<c:forEach var="spittle" items="${spittles}">
 			<s:url value="/spitters/{spitterName}" var="spitter_url" >

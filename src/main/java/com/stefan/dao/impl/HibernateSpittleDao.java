@@ -21,6 +21,8 @@ public class HibernateSpittleDao extends AbstractDao implements SpittleDao{
 		this.sessionFactory = sessionFactory;
 	}
 
+	public HibernateSpittleDao(){}
+	
 	public void addSpittle(Spittle spittle) {
 		currentSession().save(spittle);
 	}
@@ -40,4 +42,5 @@ public class HibernateSpittleDao extends AbstractDao implements SpittleDao{
 	public void deleteSpittle(Spittle spittle){
 		currentSession().delete(spittle);
 	}
+	
 }

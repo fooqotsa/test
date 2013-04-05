@@ -27,22 +27,13 @@ import com.stefan.spitter.Spitter;
 import com.stefan.spitter.SpitterService;
 
 @Controller
-@RequestMapping("/spitter")
+@RequestMapping("/spitters")
 public class SpitterController {
 	private final SpitterService spitterService;
 	
 	@Inject
 	public SpitterController(SpitterService spitterService){
 		this.spitterService = spitterService;
-	}
-	
-	@RequestMapping(value="/spittles", method=GET)
-	public String listSpittlesForSpitter(
-			@RequestParam("spitter") String username, Model model){
-		Spitter spitter = spitterService.getSpitter(username);
-		model.addAttribute(spitter);
-		model.addAttribute(spitterService.getSpittlesForSpitter(username));
-		return "spittles/list";
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, params="new")
@@ -74,11 +65,11 @@ public class SpitterController {
 		return "redirect:/spitters/" + spitter.getName();
 	}
 	
-	@RequestMapping(value="/{username}", method=RequestMethod.GET)
+	@RequestMapping(value="/{username}", method=GET)
 	public String showSpitterProfile(@PathVariable String username, Model model){
 		
 		model.addAttribute(spitterService.getSpitter(username));
-		return "spitters/view";
+		return "spitters/edit";
 	}
 
 	@RequestMapping(value = "/{username}", method = RequestMethod.GET,
@@ -94,6 +85,8 @@ public class SpitterController {
 			@RequestBody Spitter spitter){
 		spitterService.saveSpitter(spitter);
 	}
+	
+	//Private Methods
 	
 	private void validateImage(MultipartFile image) {
 		if(!image.getContentType().equals("image/jpeg")) {

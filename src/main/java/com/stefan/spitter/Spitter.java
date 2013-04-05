@@ -37,6 +37,9 @@ public class Spitter {
 	@Column(name = "spitter_password")
 	private String password;
 	
+	@Column(name = "spitter_update_by_email")
+	private boolean updateByEmail;
+
 	@OneToMany
 	private List<Spittle> spittles;
 	
@@ -73,5 +76,13 @@ public class Spitter {
 	
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public boolean isUpdateByEmail() {
+		return updateByEmail;
+	}
+	
+	public void setUpdateByEmail(boolean updateByEmail) {
+		this.updateByEmail = updateByEmail;
 	}
 }
