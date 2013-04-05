@@ -36,11 +36,9 @@ public class DAOSessionHandler {
 	
 	@Before("execution(* com.stefan.dao.impl.*.*(..))")
 	public Session getSession(JoinPoint point){
-		//Note we do NOT have to take care of closing the Session after opening it 
+		//Note we SHOULD not have to take care of closing the Session after opening it 
 		//as this session is per thread basis, once the thread closes, hibernate 
 		//will also close the session
-		System.out.println("OPENING THE SESSION");
-		System.out.println("POINT CLASS = " + point.getSignature().getName());
 		return sessionFactory.openSession();
 	}
 	

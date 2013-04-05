@@ -69,7 +69,7 @@ public class SpitterController {
 	public String showSpitterProfile(@PathVariable String username, Model model){
 		
 		model.addAttribute(spitterService.getSpitter(username));
-		return "spitters/edit";
+		return "spitters/view";
 	}
 
 	@RequestMapping(value = "/{username}", method = RequestMethod.GET,
